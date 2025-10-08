@@ -1,0 +1,29 @@
+{
+  "name": "mtga-collection",
+  "version": "0.1.0",
+  "description": "MTG Arena collection extractor (macOS) – oclif + TypeScript",
+  "license": "MIT",
+  "type": "commonjs",
+  "bin": {
+    "mtga-collection": "bin/run"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node ./bin/run",
+    "prepack": "npm run build"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@oclif/core": "^3.26.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  },
+  "oclif": {
+    "bin": "mtga-collection",
+    "commands": "./dist/commands"
+  }
+}
