@@ -19,7 +19,7 @@ export const defaultLogDir = path.join(
   'MTGA',
 );
 
-export const defaultLogs = [
+export const defaultLogs: Array<string> = [
   path.join(defaultLogDir, 'Player.log'),
   path.join(defaultLogDir, 'player-prev.log'),
 ];
@@ -62,25 +62,27 @@ function sliceJSONObject(text: string, startPos: number): string | null {
 
 function collectCardCountsFromObject(root: unknown): Map<number, number> {
   const counts = new Map<number, number>();
-  const visit = (node: unknown, stackKeys: string[] = []) => {
+  const visit = (node: unknown): void => {
     if (!node) return;
     if (Array.isArray(node)) {
-      node.forEach((v) => visit(v, stackKeys));
+      node.forEach((value) => visit(value));
       return;
     }
     if (typeof node === 'object') {
       const obj = node as Record<string, unknown>;
       if ('cardId' in obj && 'quantity' in obj) {
-        const id = Number((obj as any).cardId);
-        const q = Number((obj as any).quantity);
-        if (Number.isInteger(id) && Number.isFinite(q)) {
-          counts.set(id, Math.max(counts.get(id) ?? 0, q));
+        const idCandidate = (obj as {cardId?: unknown}).cardId;
+        const quantityCandidate = (obj as {quantity?: unknown}).quantity;
+        const id = Number(idCandidate);
+        const quantity = Number(quantityCandidate);
+        if (Number.isInteger(id) && Number.isFinite(quantity)) {
+          counts.set(id, Math.max(counts.get(id) ?? 0, quantity));
         }
       }
-      for (const [k, v] of Object.entries(obj)) visit(v, stackKeys.concat(k));
+      for (const value of Object.values(obj)) visit(value);
     }
   };
-  visit(root, []);
+  visit(root);
   return counts;
 }
 

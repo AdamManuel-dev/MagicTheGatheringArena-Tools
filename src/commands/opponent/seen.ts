@@ -15,7 +15,7 @@ import {
   aggregateCardsByMatch,
   EventType,
 } from '../../lib/matches';
-import {createTimeFilter, isDateInRange, TimeFilter} from '../../lib/time-utils';
+import {createTimeFilter, isDateInRange} from '../../lib/time-utils';
 import {getCardByArenaId, loadBulkMap, ScryfallCardLite} from '../../lib/scryfall';
 import fs from 'fs';
 
@@ -39,6 +39,26 @@ type AggregatedCardRow = {
   rarity?: string | null;
   seen_total: number;
   match_count: number;
+};
+
+type GroupByOption = 'match' | 'card';
+
+type SortOption = 'asc' | 'desc';
+
+type SeenFlags = {
+  json: boolean;
+  out?: string;
+  limit: number;
+  since?: string;
+  from?: string;
+  to?: string;
+  opponent?: string;
+  'group-by': GroupByOption;
+  include: string;
+  'no-names': boolean;
+  bulk: boolean;
+  log?: string;
+  sort?: SortOption;
 };
 
 export default class Seen extends Command {
@@ -102,7 +122,8 @@ export default class Seen extends Command {
   };
 
   async run(): Promise<void> {
-    const {flags} = await this.parse(Seen);
+    const parsed = await this.parse(Seen);
+    const flags = parsed.flags as SeenFlags;
 
     // Read match logs
     const logData = readMatchLogs(flags.log);
@@ -114,7 +135,7 @@ export default class Seen extends Command {
     }
 
     // Parse event types
-    const includeEvents = flags.include.split(',').map((e) => e.trim() as EventType);
+    const includeEvents = flags.include.split(',').map((event) => event.trim() as EventType);
 
     // Parse matches
     let matches = parseMatches(logData.text, {
@@ -156,8 +177,8 @@ export default class Seen extends Command {
     }
   }
 
-  private async outputByMatch(matches: Match[], flags: any): Promise<void> {
-    const rows: MatchRow[] = [];
+  private async outputByMatch(matches: Array<Match>, flags: SeenFlags): Promise<void> {
+    const rows: Array<MatchRow> = [];
 
     // Resolve names if needed
     let nameMap: Map<number, ScryfallCardLite> | null = null;
@@ -165,8 +186,9 @@ export default class Seen extends Command {
       if (flags.bulk) {
         try {
           nameMap = await loadBulkMap();
-        } catch (e: any) {
-          this.warn(`Bulk load failed: ${e?.message ?? e}. Falling back to per-card lookups…`);
+        } catch (error: unknown) {
+          const reason = error instanceof Error ? error.message : String(error);
+          this.warn(`Bulk load failed: ${reason}. Falling back to per-card lookups…`);
         }
       }
     }
@@ -230,9 +252,9 @@ export default class Seen extends Command {
     }
   }
 
-  private async outputAggregated(matches: Match[], flags: any): Promise<void> {
+  private async outputAggregated(matches: Array<Match>, flags: SeenFlags): Promise<void> {
     const aggregated = aggregateCardsByMatch(matches);
-    let rows: AggregatedCardRow[] = [];
+    const rows: Array<AggregatedCardRow> = [];
 
     // Resolve names if needed
     let nameMap: Map<number, ScryfallCardLite> | null = null;
@@ -240,8 +262,9 @@ export default class Seen extends Command {
       if (flags.bulk) {
         try {
           nameMap = await loadBulkMap();
-        } catch (e: any) {
-          this.warn(`Bulk load failed: ${e?.message ?? e}. Falling back to per-card lookups…`);
+        } catch (error: unknown) {
+          const reason = error instanceof Error ? error.message : String(error);
+          this.warn(`Bulk load failed: ${reason}. Falling back to per-card lookups…`);
         }
       }
     }
@@ -270,8 +293,8 @@ export default class Seen extends Command {
 
     // Apply sorting
     if (flags.sort) {
-      rows.sort((a, b) => {
-        const diff = a.seen_total - b.seen_total;
+      rows.sort((first, second) => {
+        const diff = first.seen_total - second.seen_total;
         return flags.sort === 'desc' ? -diff : diff;
       });
     }

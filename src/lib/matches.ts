@@ -20,7 +20,7 @@ export const defaultMatchLogDir = path.join(
   'Logs',
 );
 
-export const defaultMatchLogs = [
+export const defaultMatchLogs: Array<string> = [
   path.join(defaultMatchLogDir, 'Player.log'),
   path.join(defaultMatchLogDir, 'Player-prev.log'),
 ];
@@ -37,7 +37,7 @@ export type OpponentCard = {
   arenaId: number;
   firstSeen: EventType;
   seenCount: number;
-  events: CardEvent[];
+  events: Array<CardEvent>;
 };
 
 export type Match = {
@@ -76,7 +76,7 @@ function parseTimestamp(line: string): Date | null {
   return null;
 }
 
-function extractJSON(line: string): any | null {
+function extractJSON(line: string): Record<string, unknown> | null {
   // Find JSON objects in log lines
   const jsonStart = line.indexOf('{');
   if (jsonStart === -1) return null;
@@ -84,7 +84,8 @@ function extractJSON(line: string): any | null {
   try {
     // Try to parse from first { to end of line
     const jsonStr = line.slice(jsonStart);
-    return JSON.parse(jsonStr);
+    const parsed = JSON.parse(jsonStr);
+    return typeof parsed === 'object' && parsed !== null ? (parsed as Record<string, unknown>) : null;
   } catch {
     // Try to find complete JSON object with brace matching
     let depth = 0;
@@ -111,7 +112,8 @@ function extractJSON(line: string): any | null {
         depth--;
         if (depth === 0) {
           try {
-            return JSON.parse(line.slice(jsonStart, i + 1));
+            const parsed = JSON.parse(line.slice(jsonStart, i + 1));
+            return typeof parsed === 'object' && parsed !== null ? (parsed as Record<string, unknown>) : null;
           } catch {
             return null;
           }
@@ -123,30 +125,51 @@ function extractJSON(line: string): any | null {
   return null;
 }
 
-function detectEventType(data: any, playerId: number): EventType | null {
+function detectEventType(data: Record<string, unknown>, playerId: number): EventType | null {
   // Detect card event types from GRE updates
 
-  // Check for spell cast
-  if (data.greToClientEvent?.greToClientMessages) {
-    for (const msg of data.greToClientEvent.greToClientMessages) {
-      if (msg.type === 'GREMessageType_QueuedGameStateMessage') {
-        const gameState = msg.gameStateMessage;
-        if (gameState?.gameObjects) {
-          for (const obj of gameState.gameObjects) {
-            if (obj.ownerSeatId !== playerId && obj.grpId) {
-              // Check zone changes
-              if (obj.zoneId === 4) return 'cast'; // Stack zone
-              if (obj.zoneId === 2) return 'etb';  // Battlefield zone
-              if (obj.zoneId === 3) return 'move'; // Graveyard zone
-              if (obj.zoneId === 5) return 'move'; // Exile zone
+  const event = data.greToClientEvent;
+  if (!event || typeof event !== 'object') return null;
+
+  const messages = (event as {greToClientMessages?: unknown}).greToClientMessages;
+  if (!Array.isArray(messages)) return null;
+
+  for (const rawMessage of messages) {
+    if (!rawMessage || typeof rawMessage !== 'object') continue;
+    const message = rawMessage as Record<string, unknown>;
+    const type = typeof message.type === 'string' ? message.type : undefined;
+
+    if (type === 'GREMessageType_QueuedGameStateMessage') {
+      const gameState = message.gameStateMessage;
+      if (gameState && typeof gameState === 'object') {
+        const objects = (gameState as {gameObjects?: unknown}).gameObjects;
+        if (Array.isArray(objects)) {
+          for (const rawObject of objects) {
+            if (!rawObject || typeof rawObject !== 'object') continue;
+            const obj = rawObject as {
+              ownerSeatId?: unknown;
+              grpId?: unknown;
+              zoneId?: unknown;
+            };
+            const ownerSeatId = typeof obj.ownerSeatId === 'number' ? obj.ownerSeatId : undefined;
+            const grpId = typeof obj.grpId === 'number' ? obj.grpId : undefined;
+            const zoneId = typeof obj.zoneId === 'number' ? obj.zoneId : undefined;
+            if (typeof grpId === 'number' && ownerSeatId !== playerId && typeof zoneId === 'number') {
+              if (zoneId === 4) return 'cast'; // Stack zone
+              if (zoneId === 2) return 'etb'; // Battlefield zone
+              if (zoneId === 3) return 'move'; // Graveyard zone
+              if (zoneId === 5) return 'move'; // Exile zone
             }
           }
         }
       }
+    }
 
-      // Check for revealed cards
-      if (msg.type === 'GREMessageType_UIMessage') {
-        if (msg.uiMessage?.type === 'ClientMessageType_RevealedCards') {
+    if (type === 'GREMessageType_UIMessage') {
+      const uiMessage = message.uiMessage;
+      if (uiMessage && typeof uiMessage === 'object') {
+        const uiType = (uiMessage as {type?: unknown}).type;
+        if (uiType === 'ClientMessageType_RevealedCards') {
           return 'revealed';
         }
       }
@@ -156,21 +179,29 @@ function detectEventType(data: any, playerId: number): EventType | null {
   return null;
 }
 
-function extractArenaIds(data: any, playerId: number): number[] {
-  const ids: number[] = [];
+function extractArenaIds(data: Record<string, unknown>, playerId: number): Array<number> {
+  const ids: Array<number> = [];
 
-  // Extract from game objects
-  if (data.greToClientEvent?.greToClientMessages) {
-    for (const msg of data.greToClientEvent.greToClientMessages) {
-      if (msg.type === 'GREMessageType_QueuedGameStateMessage') {
-        const gameState = msg.gameStateMessage;
-        if (gameState?.gameObjects) {
-          for (const obj of gameState.gameObjects) {
-            if (obj.ownerSeatId !== playerId && obj.grpId) {
-              ids.push(obj.grpId);
-            }
-          }
-        }
+  const event = data.greToClientEvent;
+  if (!event || typeof event !== 'object') return ids;
+  const messages = (event as {greToClientMessages?: unknown}).greToClientMessages;
+  if (!Array.isArray(messages)) return ids;
+
+  for (const rawMessage of messages) {
+    if (!rawMessage || typeof rawMessage !== 'object') continue;
+    const message = rawMessage as Record<string, unknown>;
+    if (message.type !== 'GREMessageType_QueuedGameStateMessage') continue;
+    const gameState = message.gameStateMessage;
+    if (!gameState || typeof gameState !== 'object') continue;
+    const objects = (gameState as {gameObjects?: unknown}).gameObjects;
+    if (!Array.isArray(objects)) continue;
+    for (const rawObject of objects) {
+      if (!rawObject || typeof rawObject !== 'object') continue;
+      const obj = rawObject as {ownerSeatId?: unknown; grpId?: unknown};
+      const ownerSeatId = typeof obj.ownerSeatId === 'number' ? obj.ownerSeatId : undefined;
+      const grpId = typeof obj.grpId === 'number' ? obj.grpId : undefined;
+      if (typeof grpId === 'number' && ownerSeatId !== playerId) {
+        ids.push(grpId);
       }
     }
   }
@@ -182,13 +213,14 @@ export function parseMatches(
   logText: string,
   options: {
     limit?: number;
-    includeEvents?: EventType[];
+    includeEvents?: Array<EventType>;
   } = {}
-): Match[] {
-  const {limit = 10, includeEvents = ['cast', 'etb', 'revealed', 'move']} = options;
+): Array<Match> {
+  const limit = options.limit ?? 10;
+  const includeEvents = options.includeEvents ?? (['cast', 'etb', 'revealed', 'move'] as Array<EventType>);
 
   const lines = logText.split('\n');
-  const matches: Match[] = [];
+  const matches: Array<Match> = [];
   let currentMatch: Match | null = null;
   let playerId = 1; // Default assumption, updated when detected
 
@@ -201,7 +233,13 @@ export function parseMatches(
 
     // Detect match start
     if (line.includes('MatchCreated') || line.includes('Event_MatchCreated')) {
-      const matchId = json.matchId || json.params?.matchId || `match_${Date.now()}`;
+      const matchIdValue = json.matchId;
+      const rawParams = json.params;
+      const params = typeof rawParams === 'object' && rawParams !== null ? (rawParams as Record<string, unknown>) : undefined;
+      const paramMatchId = params && typeof params.matchId === 'string' ? params.matchId : undefined;
+      const matchId = typeof matchIdValue === 'string' && matchIdValue.length > 0
+        ? matchIdValue
+        : paramMatchId ?? `match_${Date.now()}`;
       currentMatch = {
         matchId: String(matchId),
         startedAt: timestamp,
@@ -209,13 +247,13 @@ export function parseMatches(
       };
 
       // Try to extract opponent name
-      if (json.opponentScreenName) {
+      if (typeof json.opponentScreenName === 'string') {
         currentMatch.opponent = json.opponentScreenName;
       }
     }
 
     // Detect player ID
-    if (json.playerId !== undefined) {
+    if (typeof json.playerId === 'number') {
       playerId = json.playerId;
     }
 
@@ -263,8 +301,8 @@ export function parseMatches(
   return matches.slice(0, limit);
 }
 
-export function aggregateCardsByMatch(matches: Match[]): Map<number, {seenTotal: number; matches: string[]}> {
-  const aggregated = new Map<number, {seenTotal: number; matches: string[]}>();
+export function aggregateCardsByMatch(matches: Array<Match>): Map<number, {seenTotal: number; matches: Array<string>}> {
+  const aggregated = new Map<number, {seenTotal: number; matches: Array<string>}>();
 
   for (const match of matches) {
     for (const [arenaId, card] of match.opponentCards) {

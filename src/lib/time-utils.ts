@@ -84,7 +84,7 @@ export function formatTimeRange(filter: TimeFilter): string {
     return 'all time';
   }
 
-  const parts: string[] = [];
+  const parts: Array<string> = [];
 
   if (filter.from) {
     parts.push(`from ${filter.from.toISOString()}`);

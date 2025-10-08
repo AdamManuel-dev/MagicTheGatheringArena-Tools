@@ -17,20 +17,20 @@ export type ScryfallCardLite = {
   rarity?: string;
 };
 
-function httpsGetJSON<T = any>(url: string): Promise<T> {
+function httpsGetJSON<T = unknown>(url: string): Promise<T> {
   return new Promise((resolve, reject) => {
     https
       .get(url, (res) => {
         const gz = /gzip/i.test(res.headers['content-encoding'] || '');
         const stream = gz ? res.pipe(zlib.createGunzip()) : res;
-        const chunks: Buffer[] = [];
-        stream.on('data', (d) => chunks.push(d as Buffer));
+        const chunks: Array<Buffer> = [];
+        stream.on('data', (chunk: Buffer) => chunks.push(chunk));
         stream.on('end', () => {
           try {
             const buf = Buffer.concat(chunks).toString('utf8');
             resolve(JSON.parse(buf));
-          } catch (e) {
-            reject(e);
+          } catch (error) {
+            reject(error);
           }
         });
       })
@@ -42,12 +42,19 @@ export async function getCardByArenaId(id: number): Promise<ScryfallCardLite | n
   // https://scryfall.com/docs/api/cards/arena/:id
   const url = `https://api.scryfall.com/cards/arena/${id}`;
   try {
-    const c: any = await httpsGetJSON(url);
+    type ArenaCardResponse = {
+      name?: string;
+      set?: string;
+      collector_number?: string;
+      rarity?: string;
+    };
+    const card = await httpsGetJSON<ArenaCardResponse>(url);
+    if (typeof card?.name !== 'string') return null;
     return {
-      name: c.name,
-      set: c.set?.toUpperCase(),
-      collector_number: c.collector_number,
-      rarity: c.rarity,
+      name: card.name,
+      set: typeof card.set === 'string' ? card.set.toUpperCase() : undefined,
+      collector_number: typeof card.collector_number === 'string' ? card.collector_number : undefined,
+      rarity: typeof card.rarity === 'string' ? card.rarity : undefined,
     };
   } catch {
     return null;
@@ -57,18 +64,36 @@ export async function getCardByArenaId(id: number): Promise<ScryfallCardLite | n
 export async function loadBulkMap(): Promise<Map<number, ScryfallCardLite>> {
   // Bulk endpoint → find "default_cards", then build arena_id → lite map
   // https://scryfall.com/docs/api/cards (arena_id field)
-  const meta: any = await httpsGetJSON('https://api.scryfall.com/bulk-data');
-  const def = (meta.data || []).find((x: any) => x.type === 'default_cards');
-  if (!def?.download_uri) throw new Error('Scryfall bulk default_cards not found');
-  const cards: any[] = await httpsGetJSON(def.download_uri);
+  type BulkMetaEntry = {
+    type?: string;
+    download_uri?: string;
+  };
+  type BulkMeta = {
+    data?: Array<BulkMetaEntry>;
+  };
+  type BulkCardEntry = {
+    arena_id?: number;
+    name?: string;
+    set?: string;
+    collector_number?: string;
+    rarity?: string;
+  };
+
+  const meta = await httpsGetJSON<BulkMeta>('https://api.scryfall.com/bulk-data');
+  const entries = Array.isArray(meta.data) ? meta.data : [];
+  const def = entries.find((entry) => entry.type === 'default_cards');
+  if (!def || typeof def.download_uri !== 'string') {
+    throw new Error('Scryfall bulk default_cards not found');
+  }
+  const cards = await httpsGetJSON<Array<BulkCardEntry>>(def.download_uri);
   const map = new Map<number, ScryfallCardLite>();
   for (const c of cards) {
-    if (typeof c.arena_id === 'number') {
+    if (typeof c.arena_id === 'number' && typeof c.name === 'string') {
       map.set(c.arena_id, {
         name: c.name,
-        set: c.set?.toUpperCase(),
-        collector_number: c.collector_number,
-        rarity: c.rarity,
+        set: typeof c.set === 'string' ? c.set.toUpperCase() : undefined,
+        collector_number: typeof c.collector_number === 'string' ? c.collector_number : undefined,
+        rarity: typeof c.rarity === 'string' ? c.rarity : undefined,
       });
     }
   }

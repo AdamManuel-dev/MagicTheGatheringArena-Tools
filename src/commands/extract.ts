@@ -9,7 +9,7 @@
 
 import {Command, Flags} from '@oclif/core';
 import {extractOwnedFromLog, readBestLog} from '../lib/logs';
-import {getCardByArenaId, loadBulkMap} from '../lib/scryfall';
+import {getCardByArenaId, loadBulkMap, type ScryfallCardLite} from '../lib/scryfall';
 import fs from 'fs';
 
 type Row = {
@@ -66,16 +66,17 @@ export default class Extract extends Command {
       ].join(' '));
     }
 
-    let rows: Row[] = [];
+    let rows: Array<Row> = [];
     if (noNames) {
       rows = [...owned.entries()].map(([arena_id, quantity]) => ({arena_id, quantity}));
     } else {
       if (bulk) {
-        let map: Map<number, any>;
+        let map: Map<number, ScryfallCardLite>;
         try {
           map = await loadBulkMap();
-        } catch (e: any) {
-          this.warn(`Bulk load failed: ${e?.message ?? e}. Falling back to per-card lookups…`);
+        } catch (error: unknown) {
+          const reason = error instanceof Error ? error.message : String(error);
+          this.warn(`Bulk load failed: ${reason}. Falling back to per-card lookups…`);
           map = new Map();
         }
         rows = [...owned.entries()].map(([arena_id, quantity]) => {
