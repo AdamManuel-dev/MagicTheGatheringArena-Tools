@@ -1,0 +1,51 @@
+{
+  "matches": [
+    {
+      "matchId": "m1",
+      "queue": "ranked_standard",
+      "deckId": "deck-1",
+      "deckName": "Mono Red",
+      "opponent": "ControlMage",
+      "opponentArchetype": "Esper Control",
+      "startedAt": "2025-10-07T20:00:00Z",
+      "result": "win",
+      "games": [
+        {"gameId": "m1g1", "result": "win"},
+        {"gameId": "m1g2", "result": "loss"},
+        {"gameId": "m1g3", "result": "win"}
+      ]
+    },
+    {
+      "matchId": "m2",
+      "queue": "ranked_standard",
+      "deckId": "deck-1",
+      "deckName": "Mono Red",
+      "opponent": "AggroFan",
+      "opponentArchetype": "Gruul Aggro",
+      "startedAt": "2025-10-08T01:00:00Z",
+      "result": "loss",
+      "games": [
+        {"gameId": "m2g1", "result": "loss"},
+        {"gameId": "m2g2", "result": "loss"}
+      ]
+    },
+    {
+      "matchId": "m3",
+      "queue": "event_draft",
+      "deckId": "deck-2",
+      "deckName": "Draft Pod",
+      "opponent": "LimitedPro",
+      "opponentArchetype": "Azorius Tempo",
+      "startedAt": "2025-10-06T18:00:00Z",
+      "result": "win",
+      "games": [
+        {"gameId": "m3g1", "result": "win"}
+      ]
+    }
+  ],
+  "decks": [
+    {"deckId": "deck-1", "name": "Mono Red", "format": "standard"},
+    {"deckId": "deck-2", "name": "Draft Pod", "format": "limited"}
+  ],
+  "updatedAt": "2025-10-08T00:00:00Z"
+}

@@ -33,3 +33,4 @@ coverage/
 *.log
 .tmp/
 tmp/
+cache/

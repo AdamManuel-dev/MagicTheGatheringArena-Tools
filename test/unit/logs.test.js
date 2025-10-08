@@ -44,7 +44,7 @@ describe('logs utilities', () => {
     assert.equal(owned.get(789), 3);
   });
 
-  it('readBestLog prefers the longest available file from defaults', () => {
+  it('readBestLog prefers the longest available file from defaults', async () => {
     const shortPath = path.join(tempDir, 'short.log');
     const longPath = path.join(tempDir, 'long.log');
     fs.writeFileSync(shortPath, 'tiny', 'utf8');
@@ -53,8 +53,9 @@ describe('logs utilities', () => {
     defaultLogs.length = 0;
     defaultLogs.push(shortPath, longPath);
 
-    const result = readBestLog();
+    const result = await readBestLog();
     assert.equal(result.path, longPath);
-    assert.equal(result.text, 'this one is longer');
+    assert.ok(result.text.includes('this one is longer'));
+    assert.ok(result.text.includes('tiny'));
   });
 });

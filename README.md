@@ -15,7 +15,7 @@ A modern CLI tool for extracting your MTG Arena card collection and tracking opp
 
 ## Prerequisites
 
-- **Node.js** >= 18
+- **Node.js** >= 20.0.0 (tested on 20.11.0 LTS)
 - **MTG Arena** installed on macOS
 - **Detailed Logs** enabled in Arena (see Setup below)
 
@@ -237,7 +237,7 @@ A1B2C3,2025-10-07T23:14:12Z,CoolMage#12345,Sheoldred,DMU,107,654321,etb,1
 ### Important Notes
 
 - **Detailed Logs Required**: Enable "Detailed Logs (Plugin Support)" in Arena settings
-- **macOS Log Path**: `~/Library/Application Support/com.wizards.mtga/Logs/Logs/Player.log`
+- **macOS Log Path**: `~/Library/Logs/Wizards Of The Coast/MTGA/Player.log`
 - **Session Limits**: Current session in `Player.log`, previous in `Player-prev.log`
 - **Visibility**: Only tracks cards the opponent revealed or played (not hidden cards in hand/library)
 
@@ -338,3 +338,51 @@ Contributions welcome! Please:
 
 **Note**: This tool is unofficial and not affiliated with Wizards of the Coast. MTG Arena and Magic: The Gathering are trademarks of Wizards of the Coast LLC.
 # MagicTheGatheringArena-Tools
+
+---
+
+## Command: `odds:watch`
+
+Stream live draw odds based on Player.log events.
+
+### Replay mode (fixtures/tests)
+
+```bash
+./bin/run odds:watch --deck test/fixtures/decks/mono-red.json --log test/fixtures/logs/draw-sequence.log --replay
+```
+
+### Live tracking
+
+```bash
+./bin/run odds:watch --deck deck.json --poll-interval 250
+```
+
+Outputs a table of tracked targets with remaining counts and probabilities for the next draw and the next three draws. Use `--track <arena_id>` to focus on specific outs.
+
+---
+
+## Command: `matches:stats`
+
+Aggregate match performance into tables or CSV/JSON.
+
+```bash
+# Default grouping (deck)
+./bin/run matches:stats
+
+# Queue-filtered JSON output for ranked play over the last week
+./bin/run matches:stats --queue ranked_standard --since 7d --json
+
+# Write CSV file grouped by opponent archetype
+./bin/run matches:stats --group-by opponentArchetype --out stats.csv
+```
+
+## Command: `matches:ingest`
+
+Update the local datastore with newly finished matches captured in Player.log.
+
+```bash
+./bin/run matches:ingest
+./bin/run matches:ingest --log ~/Desktop/Player.log --datastore cache/data/datastore.json
+```
+
+Run `matches:ingest` before analytics commands to ensure stats are using fresh data.

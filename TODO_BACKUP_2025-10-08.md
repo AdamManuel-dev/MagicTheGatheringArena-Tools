@@ -1,0 +1,375 @@
+# Project TODO List
+
+## Rollout & Governance
+- [ ] **[P1/M/L]** Lock rollout plan aligning Alpha, Beta, GA deliverables to PRD scope
+  - Dependencies: Requirements traceability matrix
+  - Owner: TBD
+  - Estimate: 4-6 hours
+- [ ] **[P1/S/L]** Define go/no-go criteria for Alpha before enabling collection:export, opponent:seen, odds:watch
+  - Dependencies: Command acceptance criteria
+  - Owner: TBD
+  - Estimate: 2-3 hours
+- [ ] **[P2/M/M]** Establish Beta readiness checklist covering post-game stats and limited helpers
+  - Dependencies: Beta feature specs
+  - Owner: TBD
+  - Estimate: 3-4 hours
+- [ ] **[P3/S/M]** Create GA launch plan including documentation, tracing/evals, and profile feature toggles
+  - Dependencies: Tracing instrumentation plan
+  - Owner: TBD
+  - Estimate: 3-4 hours
+
+## Category 1: Features & Requirements Analysis
+- [ ] **[P1/M/L]** Build requirements traceability matrix mapping PRD sections to commands and outputs
+  - Dependencies: None
+  - Owner: TBD
+  - Estimate: 4-6 hours
+- [ ] **[P1/M/L]** Draft acceptance criteria for each CLI command (inputs, outputs, error states)
+  - Dependencies: Requirements traceability matrix
+  - Owner: TBD
+  - Estimate: 4-6 hours
+- [ ] **[P1/M/M]** Enumerate Player.log availability and corruption edge cases for live features
+  - Dependencies: Sample Player.log collection
+  - Owner: TBD
+  - Estimate: 3-4 hours
+- [ ] **[P1/M/L]** Document success metric instrumentation needs (TTFI, brew legality, opponent summaries)
+  - Dependencies: Acceptance criteria
+  - Owner: TBD
+  - Estimate: 3-4 hours
+- [ ] **[P1/M/L]** Identify implicit infrastructure/documentation requirements (Detailed Logs toggle, macOS paths)
+  - Dependencies: Edge case catalog
+  - Owner: TBD
+  - Estimate: 3-4 hours
+- [ ] **[P1/L/L]** Validate Untapped feature parity gap analysis and highlight deviations to stakeholders
+  - Dependencies: Requirements traceability matrix
+  - Owner: TBD
+  - Estimate: 2-3 hours
+
+### Live Game Terminal Overlay (odds:watch, opponent:seen)
+- [ ] **[P1/L/L]** Finalize hypergeometric odds specification including mulligan handling and draw step timing
+  - Dependencies: Acceptance criteria
+  - Owner: TBD
+  - Estimate: 2-3 hours
+- [ ] **[P1/M/L]** Define opponent card tracking rules (phase resets, duplicates, split cards)
+  - Dependencies: Edge case catalog
+  - Owner: TBD
+  - Estimate: 3-4 hours
+
+### Post-Game Analytics (matches:stats, rank:progress)
+- [ ] **[P2/M/M]** Specify stat aggregation windows (per-deck, per-queue, per-opponent archetype)
+  - Dependencies: Traceability matrix
+  - Owner: TBD
+  - Estimate: 3-4 hours
+- [ ] **[P2/L/M]** Outline ladder progression visualization requirements for CSV/JSON consumers
+  - Dependencies: Stat aggregation spec
+  - Owner: TBD
+  - Estimate: 2-3 hours
+
+### Collection & Limited Helpers
+- [ ] **[P1/M/L]** Capture collection export schema including Scryfall enrichment and rarity breakdowns
+  - Dependencies: Acceptance criteria
+  - Owner: TBD
+  - Estimate: 3-4 hours
+- [ ] **[P2/M/L]** Define LLM draft pick feature prompts, constraints, and output validation rules
+  - Dependencies: LLM output schema design
+  - Owner: TBD
+  - Estimate: 4-6 hours
+
+### Constructed & Brawl LLM Features
+- [ ] **[P2/M/L]** Document brew/matchplan prompt flows, required inputs, and fallback strategies
+  - Dependencies: Brew workflow design
+  - Owner: TBD
+  - Estimate: 4-6 hours
+- [ ] **[P2/M/M]** Capture explanation/mulligan storytelling criteria (tone, length, jargon rules)
+  - Dependencies: Prompt flows
+  - Owner: TBD
+  - Estimate: 3-4 hours
+
+## Category 2: User Story Decomposition
+- [ ] **[P1/M/L]** Create user journey maps for ladder grinder, brewer, and limited player archetypes
+  - Dependencies: Requirements traceability matrix
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P1/M/M]** Detail CLI walkthrough scripts for Alpha commands including expected terminal output snapshots
+  - Dependencies: User journey maps
+  - Owner: TBD
+  - Estimate: 3-4 hours
+- [ ] **[P1/M/M]** Draft usability heuristics for live TTY updates (refresh cadence, color use, truncation)
+  - Dependencies: CLI walkthrough scripts
+  - Owner: TBD
+  - Estimate: 3-4 hours
+- [ ] **[P2/M/M]** Map post-game stats consumption scenarios (spreadsheet import, dashboard integration)
+  - Dependencies: Analytics spec
+  - Owner: TBD
+  - Estimate: 3-4 hours
+- [ ] **[P2/S/M]** Define acceptance scripts for LLM draft and brew experiences covering happy path and failure recovery
+  - Dependencies: Prompt flows
+  - Owner: TBD
+  - Estimate: 2-3 hours
+- [ ] **[P3/M/M]** Capture GA onboarding story (enable detailed logs, configure providers, run first report)
+  - Dependencies: Documentation outline
+  - Owner: TBD
+  - Estimate: 3-4 hours
+
+## Category 3: Technical Architecture
+- [ ] **[P1/M/L]** Audit current oclif project structure and reserve namespaces for new commands
+  - Dependencies: Requirements traceability matrix
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P1/L/L]** Upgrade toolchain to Node ≥20 and confirm TypeScript/tsconfig compatibility
+  - Dependencies: Toolchain audit
+  - Owner: TBD
+  - Estimate: 2-3 hours
+- [ ] **[P1/L/L]** Scaffold Mastra instance with agent registry, tool bindings, and config hooks
+  - Dependencies: Toolchain upgrade
+  - Owner: TBD
+  - Estimate: 3-4 hours
+- [ ] **[P1/M/L]** Implement shared log ingestion service handling Player.log and player-prev.log rotation
+  - Dependencies: Mastra scaffolding
+  - Owner: TBD
+  - Estimate: 5-7 hours
+- [ ] **[P1/M/L]** Create shared output formatter utilities for tables, CSV, JSON, Markdown exports
+  - Dependencies: CLI walkthrough scripts
+  - Owner: TBD
+  - Estimate: 4-6 hours
+- [ ] **[P1/L/M]** Integrate Mastra tracing hooks with CLI command lifecycle (start, success, failure)
+  - Dependencies: Mastra scaffolding
+  - Owner: TBD
+  - Estimate: 3-4 hours
+- [ ] **[P1/M/L]** Implement configuration layer for provider selection, model routing, and defaults
+  - Dependencies: Mastra scaffolding
+  - Owner: TBD
+  - Estimate: 4-6 hours
+- [ ] **[P1/M/M]** Design caching and retry strategy for Player.log file reads under macOS file locks
+  - Dependencies: Log ingestion service
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P2/M/M]** Extend architecture for batch analytics pipeline (log parsing → aggregation → export)
+  - Dependencies: Log ingestion service
+  - Owner: TBD
+  - Estimate: 4-6 hours
+- [ ] **[P3/M/M]** Add profile management subsystem for GA (user-specific default agents/models)
+  - Dependencies: Provider configuration layer
+  - Owner: TBD
+  - Estimate: 4-6 hours
+
+## Category 4: API Development
+- [ ] **[P1/M/L]** Build Scryfall Tool wrapper with bulk cache download, delta sync, and per-ID fallback
+  - Dependencies: Mastra scaffolding
+  - Owner: TBD
+  - Estimate: 5-7 hours
+- [ ] **[P1/S/M]** Implement CLI `--bulk` option triggering Scryfall bulk refresh and cache warmup
+  - Dependencies: Scryfall Tool wrapper
+  - Owner: TBD
+  - Estimate: 2-3 hours
+- [ ] **[P1/M/L]** Expose Math Tool implementing hypergeometric probability utilities with tests
+  - Dependencies: Mastra scaffolding
+  - Owner: TBD
+  - Estimate: 4-6 hours
+- [ ] **[P1/M/M]** Implement Logs Tool methods for real-time GRE event parsing and historical match summaries
+  - Dependencies: Log ingestion service
+  - Owner: TBD
+  - Estimate: 5-7 hours
+- [ ] **[P2/M/M]** Deliver Legality Tool enforcing format legality, singleton rules, and color identity checks
+  - Dependencies: Scryfall Tool wrapper
+  - Owner: TBD
+  - Estimate: 4-6 hours
+- [ ] **[P2/M/M]** Implement Writer Tool exporters for Arena import strings, CSV, and Markdown templates
+  - Dependencies: Output formatter utilities
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P2/M/M]** Create internal stats aggregation API powering matches:stats and rank:progress
+  - Dependencies: Batch analytics pipeline
+  - Owner: TBD
+  - Estimate: 4-6 hours
+- [ ] **[P3/M/M]** Build tracing/evals API to persist Mastra evaluation runs for GA readiness
+  - Dependencies: Mastra tracing hooks
+  - Owner: TBD
+  - Estimate: 4-6 hours
+
+## Category 5: Data Layer Design
+- [ ] **[P1/M/L]** Model Player.log event schemas and normalize into shared TypeScript types
+  - Dependencies: Log ingestion service
+  - Owner: TBD
+  - Estimate: 4-6 hours
+- [ ] **[P1/M/L]** Implement local datastore for cached decklists, match history, and collection snapshots
+  - Dependencies: Data schema modeling
+  - Owner: TBD
+  - Estimate: 4-6 hours
+- [ ] **[P1/M/M]** Define delta update strategy to reconcile Player.log with cached state on CLI start
+  - Dependencies: Local datastore implementation
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P2/M/M]** Add indexing strategy for fast opponent card lookups and match filtering
+  - Dependencies: Local datastore implementation
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P2/L/M]** Create migration scripts for evolving cached schema (version stamping, upgrades)
+  - Dependencies: Local datastore implementation
+  - Owner: TBD
+  - Estimate: 3-4 hours
+- [ ] **[P2/M/M]** Implement data retention policy and pruning utilities for historical matches and logs
+  - Dependencies: Local datastore implementation
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P3/M/M]** Add backup/export routines for user data with configurable destinations
+  - Dependencies: Data retention utilities
+  - Owner: TBD
+  - Estimate: 4-6 hours
+
+## Category 6: Security Implementation
+- [ ] **[P1/S/M]** Establish secure storage for API keys/provider credentials with environment variable support
+  - Dependencies: Provider configuration layer
+  - Owner: TBD
+  - Estimate: 2-3 hours
+- [ ] **[P1/M/M]** Implement permission checks to prevent accidental upload of logs or personal data
+  - Dependencies: Log ingestion service
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P1/M/M]** Add redaction utility for sensitive identifiers in exports and logs
+  - Dependencies: Output formatter utilities
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P2/S/M]** Provide role-based configuration for Mastra agents (e.g., restrict matchplan to trusted models)
+  - Dependencies: Mastra agent registry
+  - Owner: TBD
+  - Estimate: 2-3 hours
+- [ ] **[P2/M/M]** Conduct security review of Scryfall network calls, including retry/backoff and TLS validation
+  - Dependencies: Scryfall Tool wrapper
+  - Owner: TBD
+  - Estimate: 3-4 hours
+- [ ] **[P2/M/M]** Implement audit logging for Mastra agent invocations and CLI flags
+  - Dependencies: Tracing hooks
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P3/M/M]** Schedule periodic security audit (static analysis, dependency review) before GA
+  - Dependencies: CI pipeline enhancements
+  - Owner: TBD
+  - Estimate: 4-5 hours
+
+## Category 7: Quality Assurance Strategy
+- [ ] **[P1/M/L]** Assemble anonymized Player.log fixtures covering Standard, Limited, Brawl scenarios
+  - Dependencies: Sample Player.log collection
+  - Owner: TBD
+  - Estimate: 4-6 hours
+- [ ] **[P1/M/M]** Write unit tests for log parsing, odds computations, and cache reconciliation
+  - Dependencies: Log ingestion service, Math Tool
+  - Owner: TBD
+  - Estimate: 5-7 hours
+- [ ] **[P1/M/M]** Create integration tests simulating live match flows for odds:watch and opponent:seen
+  - Dependencies: Player.log fixtures, CLI scaffolding
+  - Owner: TBD
+  - Estimate: 5-7 hours
+- [ ] **[P1/M/M]** Define manual regression checklist for Alpha commands (watch, seen, collection export)
+  - Dependencies: Acceptance scripts
+  - Owner: TBD
+  - Estimate: 3-4 hours
+- [ ] **[P2/M/M]** Develop automated regression suite for batch reports (matches:stats, rank:progress)
+  - Dependencies: Stats API implementation
+  - Owner: TBD
+  - Estimate: 4-6 hours
+- [ ] **[P2/M/M]** Implement evaluation harness for Mastra workflows with acceptance thresholds per success metrics
+  - Dependencies: Tracing/evals API
+  - Owner: TBD
+  - Estimate: 4-6 hours
+- [ ] **[P2/S/M]** Set up code review checklist emphasizing security, logging, and UX criteria
+  - Dependencies: Manual regression checklist
+  - Owner: TBD
+  - Estimate: 2-3 hours
+- [ ] **[P3/M/M]** Conduct load/performance tests to validate ≤10s odds rendering and brew legality rate targets
+  - Dependencies: Evaluation harness
+  - Owner: TBD
+  - Estimate: 4-6 hours
+
+## Category 8: Documentation Creation
+- [ ] **[P1/M/M]** Draft setup guide covering Node 20 requirement, Detailed Logs enablement, and CLI install
+  - Dependencies: Toolchain upgrade
+  - Owner: TBD
+  - Estimate: 3-4 hours
+- [ ] **[P1/M/M]** Update command reference for Alpha surface with flag tables and sample outputs
+  - Dependencies: CLI walkthrough scripts
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P1/S/M]** Add troubleshooting section for missing Player.log, permission issues, and macOS paths
+  - Dependencies: Edge case catalog
+  - Owner: TBD
+  - Estimate: 2-3 hours
+- [ ] **[P2/M/M]** Produce analytics usage guide (matches:stats, rank:progress) including visualization examples
+  - Dependencies: Post-game analytics spec
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P2/M/M]** Author LLM workflow handbook detailing prompts, flags, evaluation expectations
+  - Dependencies: Prompt flow documentation
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P2/S/M]** Document provider configuration and credential management best practices
+  - Dependencies: Secure storage implementation
+  - Owner: TBD
+  - Estimate: 2-3 hours
+- [ ] **[P3/M/M]** Write GA release notes summarizing tracing, profiling, and advanced features
+  - Dependencies: GA launch plan
+  - Owner: TBD
+  - Estimate: 3-4 hours
+- [ ] **[P3/M/M]** Publish operational runbook (monitoring, alert thresholds, backup procedures)
+  - Dependencies: Operations automation tasks
+  - Owner: TBD
+  - Estimate: 4-5 hours
+
+## Category 9: DevOps & Operations
+- [ ] **[P1/M/L]** Configure CI to run linting, TypeScript checks, and targeted unit tests on Node 20
+  - Dependencies: Toolchain upgrade
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P1/M/M]** Add GitHub workflow (or equivalent) to package and distribute CLI binaries/tarballs
+  - Dependencies: CI configuration
+  - Owner: TBD
+  - Estimate: 4-6 hours
+- [ ] **[P1/S/M]** Automate cache warmup job for Scryfall bulk data during releases
+  - Dependencies: `--bulk` implementation
+  - Owner: TBD
+  - Estimate: 2-3 hours
+- [ ] **[P1/M/M]** Implement telemetry opt-in with anonymized metrics for usage tracking (respecting privacy scope)
+  - Dependencies: Security review, tracing hooks
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P2/M/M]** Configure monitoring/alerts for CLI errors, agent failures, and data freshness
+  - Dependencies: Telemetry opt-in
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P2/M/M]** Establish release channel process (alpha, beta, stable) with changelog automation
+  - Dependencies: Packaging workflow
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P2/M/M]** Set up scheduled job to validate Scryfall cache integrity and regenerate as needed
+  - Dependencies: Monitoring setup
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P3/M/M]** Integrate Mastra evaluation dashboards into operational reporting
+  - Dependencies: Tracing/evals API
+  - Owner: TBD
+  - Estimate: 4-6 hours
+- [ ] **[P3/S/M]** Document disaster recovery drill for corrupted caches or log ingestion failures
+  - Dependencies: Operational runbook
+  - Owner: TBD
+  - Estimate: 2-3 hours
+
+## Cross-Cutting Risk Mitigation & Buffers
+- [ ] **[P1/M/M]** Verify Detailed Logs detection and provide actionable error messaging if disabled
+  - Dependencies: Log ingestion service
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P1/S/M]** Allocate investigation buffer for Mastra integration blockers (minimum 10% sprint capacity)
+  - Dependencies: Rollout plan
+  - Owner: TBD
+  - Estimate: 1-2 hours (planning)
+- [ ] **[P2/M/M]** Prototype fallback strategy for offline Scryfall usage using cached oracle text snapshots
+  - Dependencies: Scryfall Tool wrapper
+  - Owner: TBD
+  - Estimate: 4-5 hours
+- [ ] **[P2/S/M]** Define contingency for Player.log schema changes (version detection, adapter layer)
+  - Dependencies: Data schema modeling
+  - Owner: TBD
+  - Estimate: 2-3 hours
+- [ ] **[P3/M/M]** Schedule post-GA retrospective to audit success metrics and backlog remaining parity gaps
+  - Dependencies: GA launch plan
+  - Owner: TBD
+  - Estimate: 3-4 hours

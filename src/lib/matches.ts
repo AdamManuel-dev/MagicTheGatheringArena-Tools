@@ -14,10 +14,9 @@ import path from 'path';
 export const defaultMatchLogDir = path.join(
   os.homedir(),
   'Library',
-  'Application Support',
-  'com.wizards.mtga',
   'Logs',
-  'Logs',
+  'Wizards Of The Coast',
+  'MTGA',
 );
 
 export const defaultMatchLogs: Array<string> = [

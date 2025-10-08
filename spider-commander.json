@@ -1,0 +1,335 @@
+{
+  "cards": [
+    {
+      "arena_id": 86257,
+      "name": "Ishkanah, Grafwidow",
+      "quantity": 1
+    },
+    {
+      "arena_id": 84922,
+      "name": "Shelob, Child of Ungoliant",
+      "quantity": 1
+    },
+    {
+      "arena_id": 70676,
+      "name": "Arasta of the Endless Web",
+      "quantity": 1
+    },
+    {
+      "arena_id": 82706,
+      "name": "Skyfisher Spider",
+      "quantity": 1
+    },
+    {
+      "arena_id": 93825,
+      "name": "Spinner of Souls",
+      "quantity": 1
+    },
+    {
+      "arena_id": 94475,
+      "name": "Nyx Weaver",
+      "quantity": 1
+    },
+    {
+      "arena_id": 89122,
+      "name": "Izoni, Center of the Web",
+      "quantity": 1
+    },
+    {
+      "arena_id": 77217,
+      "name": "Lolth, Spider Queen",
+      "quantity": 1
+    },
+    {
+      "arena_id": 95666,
+      "name": "Herd Heirloom",
+      "quantity": 1
+    },
+    {
+      "arena_id": 75539,
+      "name": "Ilysian Caryatid",
+      "quantity": 1
+    },
+    {
+      "arena_id": 92293,
+      "name": "Twitching Doll",
+      "quantity": 1
+    },
+    {
+      "arena_id": 70678,
+      "name": "Chainweb Aracnir",
+      "quantity": 1
+    },
+    {
+      "arena_id": 84870,
+      "name": "Mirkwood Spider",
+      "quantity": 1
+    },
+    {
+      "arena_id": 74053,
+      "name": "Obelisk Spider",
+      "quantity": 1
+    },
+    {
+      "arena_id": 71990,
+      "name": "Sporeweb Weaver",
+      "quantity": 1
+    },
+    {
+      "arena_id": 81742,
+      "name": "Drider",
+      "quantity": 1
+    },
+    {
+      "arena_id": 82740,
+      "name": "A-Thran Spider",
+      "quantity": 1
+    },
+    {
+      "arena_id": 82231,
+      "name": "Snarespinner",
+      "quantity": 1
+    },
+    {
+      "arena_id": 93827,
+      "name": "Treetop Snarespinner",
+      "quantity": 1
+    },
+    {
+      "arena_id": 75217,
+      "name": "Gnottvold Recluse",
+      "quantity": 1
+    },
+    {
+      "arena_id": 71223,
+      "name": "Glowstone Recluse",
+      "quantity": 1
+    },
+    {
+      "arena_id": 68593,
+      "name": "Hatchery Spider",
+      "quantity": 1
+    },
+    {
+      "arena_id": 78529,
+      "name": "Brood Weaver",
+      "quantity": 1
+    },
+    {
+      "arena_id": 92305,
+      "name": "Broodspinner",
+      "quantity": 1
+    },
+    {
+      "arena_id": 70464,
+      "name": "Arcane Signet",
+      "quantity": 1
+    },
+    {
+      "arena_id": 92941,
+      "name": "Chromatic Lantern",
+      "quantity": 1
+    },
+    {
+      "arena_id": 82834,
+      "name": "Mox Amber",
+      "quantity": 1
+    },
+    {
+      "arena_id": 91783,
+      "name": "Patchwork Banner",
+      "quantity": 1
+    },
+    {
+      "arena_id": 93840,
+      "name": "Banner of Kinship",
+      "quantity": 1
+    },
+    {
+      "arena_id": 66481,
+      "name": "Vanquisher's Banner",
+      "quantity": 1
+    },
+    {
+      "arena_id": 75112,
+      "name": "Reflections of Littjara",
+      "quantity": 1
+    },
+    {
+      "arena_id": 87421,
+      "name": "Roaming Throne",
+      "quantity": 1
+    },
+    {
+      "arena_id": 75287,
+      "name": "Maskwood Nexus",
+      "quantity": 1
+    },
+    {
+      "arena_id": 86669,
+      "name": "Spider Spawning",
+      "quantity": 1
+    },
+    {
+      "arena_id": 89101,
+      "name": "Assassin's Trophy",
+      "quantity": 1
+    },
+    {
+      "arena_id": 94089,
+      "name": "Maelstrom Pulse",
+      "quantity": 1
+    },
+    {
+      "arena_id": 81738,
+      "name": "Cast Down",
+      "quantity": 1
+    },
+    {
+      "arena_id": 83808,
+      "name": "Sheoldred's Edict",
+      "quantity": 1
+    },
+    {
+      "arena_id": 93885,
+      "name": "Eaten Alive",
+      "quantity": 1
+    },
+    {
+      "arena_id": 89084,
+      "name": "Pick Your Poison",
+      "quantity": 1
+    },
+    {
+      "arena_id": 81254,
+      "name": "Grave Choice",
+      "quantity": 1
+    },
+    {
+      "arena_id": 86797,
+      "name": "Not Dead After All",
+      "quantity": 1
+    },
+    {
+      "arena_id": 87435,
+      "name": "Cavern of Souls",
+      "quantity": 1
+    },
+    {
+      "arena_id": 79715,
+      "name": "Secluded Courtyard",
+      "quantity": 1
+    },
+    {
+      "arena_id": 70466,
+      "name": "Command Tower",
+      "quantity": 1
+    },
+    {
+      "arena_id": 94128,
+      "name": "Temple of Malady",
+      "quantity": 1
+    },
+    {
+      "arena_id": 58407,
+      "name": "Jungle Hollow",
+      "quantity": 1
+    },
+    {
+      "arena_id": 94117,
+      "name": "Golgari Guildgate",
+      "quantity": 1
+    },
+    {
+      "arena_id": 89193,
+      "name": "Underground Mortuary",
+      "quantity": 1
+    },
+    {
+      "arena_id": 95060,
+      "name": "Night Market",
+      "quantity": 1
+    },
+    {
+      "arena_id": 66495,
+      "name": "Unclaimed Territory",
+      "quantity": 1
+    },
+    {
+      "arena_id": 58449,
+      "name": "Mountain",
+      "quantity": 2
+    },
+    {
+      "arena_id": 58437,
+      "name": "Plains",
+      "quantity": 1
+    },
+    {
+      "arena_id": 58441,
+      "name": "Island",
+      "quantity": 1
+    },
+    {
+      "arena_id": 58445,
+      "name": "Forest",
+      "quantity": 16
+    },
+    {
+      "arena_id": 58453,
+      "name": "Swamp",
+      "quantity": 6
+    }
+  ],
+  "groups": [
+    {
+      "id": "spiders",
+      "label": "Spider Creatures",
+      "arena_ids": [
+        86257,
+        84922,
+        82706,
+        77217,
+        84870,
+        74053,
+        82740,
+        68593,
+        86669
+      ]
+    },
+    {
+      "id": "lands",
+      "label": "Lands",
+      "arena_ids": [
+        87435,
+        79715,
+        70466,
+        94128,
+        58407,
+        94117,
+        89193,
+        95060,
+        66495,
+        58449,
+        58437,
+        58441,
+        58445,
+        58453
+      ]
+    },
+    {
+      "id": "removal",
+      "label": "Removal",
+      "arena_ids": [
+        89101,
+        94089,
+        81738,
+        83808,
+        93885,
+        89084,
+        81254,
+        86797
+      ]
+    }
+  ]
+}

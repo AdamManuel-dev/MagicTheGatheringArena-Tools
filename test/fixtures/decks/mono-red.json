@@ -1,0 +1,11 @@
+{
+  "cards": [
+    {"arena_id": 69172, "name": "Lightning Bolt", "quantity": 4},
+    {"arena_id": 123, "name": "Mountain", "quantity": 20},
+    {"arena_id": 456, "name": "Play with Fire", "quantity": 4}
+  ],
+  "groups": [
+    {"id": "bolt", "label": "Lightning Bolt", "arena_ids": [69172]},
+    {"id": "lands", "label": "Lands", "arena_ids": [123]}
+  ]
+}

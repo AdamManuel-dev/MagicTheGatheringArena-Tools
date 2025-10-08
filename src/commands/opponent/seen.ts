@@ -130,7 +130,7 @@ export default class Seen extends Command {
     if (!logData.text) {
       this.error(
         'Could not read Player.log. Verify MTG Arena is installed and Detailed Logs are enabled.\n' +
-        'macOS path: ~/Library/Application Support/com.wizards.mtga/Logs/Logs/Player.log'
+        'macOS path: ~/Library/Logs/Wizards Of The Coast/MTGA/Player.log'
       );
     }
 
